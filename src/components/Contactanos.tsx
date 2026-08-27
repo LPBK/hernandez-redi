@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaClock, FaFacebookMessenger } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
 import Footer from './Footer';
 
 export default function Contactanos() {
+  const location = useLocation();
+
   const [formData, setFormData] = useState({
     nombre: '',
     email: '',
@@ -10,17 +13,53 @@ export default function Contactanos() {
     mensaje: ''
   });
 
-  const [submitted, setSubmitted] = useState(false);
+  useEffect(() => {
+    if (location.state && (location.state as any).subject) {
+      setFormData(prev => ({
+        ...prev,
+        sujeto: (location.state as any).subject,
+        mensaje: (location.state as any).message || ''
+      }));
+    }
+  }, [location.state]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate form submission
-    console.log('Contacto enviado:', formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ nombre: '', email: '', sujeto: 'Consulta General', mensaje: '' });
-    }, 5000);
+    setLoading(true);
+    setErrorMsg('');
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_name: formData.nombre,
+          user_email: formData.email,
+          subject: formData.sujeto,
+          message: formData.mensaje
+        })
+      });
+
+      const resData = await response.json();
+
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({ nombre: '', email: '', sujeto: 'Consulta General', mensaje: '' });
+      } else {
+        setErrorMsg(resData.error || 'Hubo un error al enviar el correo.');
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMsg('No se pudo establecer conexión con el servidor de correos. Asegúrate de ejecutar el entorno con "vercel dev" localmente.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -28,6 +67,20 @@ export default function Contactanos() {
       ...formData,
       [e.target.name]: e.target.value
     });
+  };
+
+  const handleWhatsAppFrancisco = () => {
+    const message = "Hola Dr. Francisco Hernández, me comunico a través de la web. Me gustaría realizar una consulta legal.";
+    const encodedMessage = encodeURIComponent(message);
+    const url = `https://wa.me/18297709011?text=${encodedMessage}`;
+    window.open(url, '_blank');
+  };
+
+  const handleWhatsAppEdita = () => {
+    const message = "Hola Arq. Edita Hernández, me comunico a través de la web. Me gustaría realizar una consulta sobre un proyecto de arquitectura/construcción.";
+    const encodedMessage = encodeURIComponent(message);
+    const url = `https://wa.me/18099139331?text=${encodedMessage}`;
+    window.open(url, '_blank');
   };
 
   return (
@@ -122,11 +175,18 @@ export default function Contactanos() {
                     />
                   </div>
 
+                  {errorMsg && (
+                    <div className="p-3 bg-red-600/10 border border-red-500/30 text-red-600 rounded-xl text-center text-sm font-semibold">
+                      {errorMsg}
+                    </div>
+                  )}
+
                   <button
                     type="submit"
-                    className="w-full sm:w-auto px-8 py-3.5 bg-brand-green hover:bg-brand-green-dark text-white font-bold tracking-wider text-sm rounded-lg shadow hover:shadow-lg transition-all duration-200 uppercase"
+                    disabled={loading}
+                    className="w-full sm:w-auto px-8 py-3.5 bg-brand-green hover:bg-brand-green-dark text-white font-bold tracking-wider text-sm rounded-lg shadow hover:shadow-lg transition-all duration-200 uppercase disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
-                    Enviar Mensaje
+                    {loading ? 'Enviando...' : 'Enviar Mensaje'}
                   </button>
                 </form>
               )}
@@ -149,39 +209,12 @@ export default function Contactanos() {
                   </div>
                   <div className="flex items-center space-x-3">
                     <FaEnvelope className="text-brand-green-light flex-shrink-0" size={16} />
-                    <span>contacto@hernandezinmuebles.com</span>
+                    <span>inmobiliariadelatalantico@gmail.com</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <FaClock className="text-brand-green-light flex-shrink-0" size={16} />
                     <span>Lunes a Sábado: 9:00 AM a 6:00 PM</span>
                   </div>
-                </div>
-
-                {/* Direct Messengers bar */}
-                <div className="flex gap-4 pt-4 border-t border-brand-blue-light/50 justify-center sm:justify-start">
-                  <a
-                    href="https://wa.me/qr/RIVKFTULUI6CP1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center h-12 w-12 rounded-full bg-emerald-500 hover:bg-emerald-600 transition-colors shadow"
-                    title="WhatsApp"
-                  >
-                    <FaWhatsapp size={24} />
-                  </a>
-                  <a
-                    href="mailto:contacto@hernandezinmuebles.com"
-                    className="flex items-center justify-center h-12 w-12 rounded-full bg-red-500 hover:bg-red-600 transition-colors shadow"
-                    title="Correo Electrónico"
-                  >
-                    <FaEnvelope size={22} />
-                  </a>
-                  <a
-                    href="#"
-                    className="flex items-center justify-center h-12 w-12 rounded-full bg-blue-600 hover:bg-blue-700 transition-colors shadow"
-                    title="Messenger"
-                  >
-                    <FaFacebookMessenger size={22} />
-                  </a>
                 </div>
               </div>
 
@@ -200,15 +233,13 @@ export default function Contactanos() {
                       Prestigioso abogado especializado en derecho civil, penal y migratorio, ofreciendo asesoría y representación excepcional en Samaná.
                     </p>
                   </div>
-                  <a
-                    href="https://wa.me/qr/RIVKFTULUI6CP1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center space-x-2 w-full py-2.5 bg-brand-green hover:bg-brand-green-dark text-white rounded-lg text-xs font-bold transition-colors duration-200"
+                  <button
+                    onClick={handleWhatsAppFrancisco}
+                    className="inline-flex items-center justify-center space-x-2 w-full py-2.5 bg-brand-green hover:bg-brand-green-dark text-white rounded-lg text-xs font-bold transition-colors duration-200 cursor-pointer"
                   >
                     <FaWhatsapp size={16} />
                     <span>WhatsApp Francisco</span>
-                  </a>
+                  </button>
                 </div>
 
                 {/* Edita Card */}
@@ -224,15 +255,13 @@ export default function Contactanos() {
                       Distinguida arquitecta reconocida por su excelencia en diseño y construcción, especializada en proyectos innovadores y funcionales.
                     </p>
                   </div>
-                  <a
-                    href="https://wa.me/qr/U4I6VJZXS2GOO1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center space-x-2 w-full py-2.5 bg-brand-green hover:bg-brand-green-dark text-white rounded-lg text-xs font-bold transition-colors duration-200"
+                  <button
+                    onClick={handleWhatsAppEdita}
+                    className="inline-flex items-center justify-center space-x-2 w-full py-2.5 bg-brand-green hover:bg-brand-green-dark text-white rounded-lg text-xs font-bold transition-colors duration-200 cursor-pointer"
                   >
                     <FaWhatsapp size={16} />
                     <span>WhatsApp Edita</span>
-                  </a>
+                  </button>
                 </div>
               </div>
 

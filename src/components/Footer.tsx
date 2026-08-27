@@ -1,5 +1,5 @@
 import { GiRotaryPhone } from 'react-icons/gi';
-import { FaFacebookF, FaTwitter, FaYoutube, FaTiktok, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaFacebookF, FaTiktok, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 export default function Footer() {
   return (
@@ -75,7 +75,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <FaEnvelope className="text-brand-green-light" size={18} />
-                <span>contacto@hernandezinmuebles.com</span>
+                <span>inmobiliariadelatalantico@gmail.com</span>
               </div>
               <div className="pt-2 border-t border-brand-blue-light/50">
                 <p className="font-semibold text-white">Horario de Atención:</p>
@@ -87,12 +87,20 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-400">
-          <p>&copy; 2026 Hernández Inmuebles &amp; Asociados. Todos los derechos reservados.</p>
-          <div className="flex space-x-4 mt-4 sm:mt-0">
-            <a href="#" className="hover:text-white transition-colors duration-200">Términos de Servicio</a>
-            <a href="#" className="hover:text-white transition-colors duration-200">Política de Privacidad</a>
-          </div>
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-center text-xs text-gray-400">
+          <p>
+            <span
+              onClick={(e) => {
+                if (e.detail === 3) {
+                  window.dispatchEvent(new Event('open-admin-login'));
+                }
+              }}
+              className="select-none cursor-default"
+            >
+              &copy;
+            </span>{" "}
+            2026 Hernández Inmuebles &amp; Asociados. Todos los derechos reservados.
+          </p>
         </div>
       </div>
     </footer>
