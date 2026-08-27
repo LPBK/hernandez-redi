@@ -35,7 +35,9 @@ export default function LoginModal() {
     };
   }, [isAdminMode]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -44,13 +46,21 @@ export default function LoginModal() {
       return;
     }
 
-    const success = login(username, password);
-    if (success) {
-      setIsOpen(false);
-      setUsername('');
-      setPassword('');
-    } else {
-      setError('Credenciales inválidas. Intente de nuevo.');
+    setLoading(true);
+    try {
+      const success = await login(username, password);
+      if (success) {
+        setIsOpen(false);
+        setUsername('');
+        setPassword('');
+      } else {
+        setError('Credenciales inválidas. Intente de nuevo.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Error de conexión con el servidor de bases de datos.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,7 +80,7 @@ export default function LoginModal() {
         {/* Close Button */}
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-650 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           aria-label="Cerrar modal"
         >
           <FaTimes size={16} />
@@ -108,9 +118,10 @@ export default function LoginModal() {
               </span>
               <input
                 type="text"
+                disabled={loading}
                 value={username}
                 onChange={e => setUsername(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all"
+                className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all disabled:opacity-50"
                 placeholder="Nombre de usuario"
                 autoComplete="username"
               />
@@ -127,9 +138,10 @@ export default function LoginModal() {
               </span>
               <input
                 type="password"
+                disabled={loading}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all"
+                className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all disabled:opacity-50"
                 placeholder="••••••••••••"
                 autoComplete="current-password"
               />
@@ -138,9 +150,10 @@ export default function LoginModal() {
 
           <button
             type="submit"
-            className="w-full py-3 px-4 mt-6 bg-brand-blue hover:bg-brand-blue-light text-white font-bold rounded-xl text-sm shadow-lg shadow-brand-blue/20 transition-all transform hover:-translate-y-[1px] active:translate-y-0 cursor-pointer"
+            disabled={loading}
+            className="w-full py-3 px-4 mt-6 bg-brand-blue hover:bg-brand-blue-light text-white font-bold rounded-xl text-sm shadow-lg shadow-brand-blue/20 transition-all transform hover:-translate-y-[1px] active:translate-y-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Iniciar Sesión
+            {loading ? 'Validando...' : 'Iniciar Sesión'}
           </button>
         </form>
       </div>
