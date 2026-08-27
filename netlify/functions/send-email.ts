@@ -7,9 +7,9 @@ export default async (request: Request) => {
     const body = await request.json();
     const { user_name, user_email, subject, message } = body;
 
-    const data = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: 'Contacto Web <onboarding@resend.dev>',
-      to: ['inmobiliariadelatlantico@gmail.com'],
+      to: ['inmobiliariadelatalantico@gmail.com'],
       subject: `Nueva Consulta Web: ${subject}`,
       html: `
         <h2>Nueva consulta desde la página web</h2>
@@ -22,6 +22,15 @@ export default async (request: Request) => {
         </blockquote>
       `,
     });
+
+    if (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 400,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
 
     return new Response(JSON.stringify(data), {
       status: 200,
