@@ -14,11 +14,11 @@ export default function Inicio() {
             backgroundImage: "url('/hero_villa.jpg')",
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-black/60 sm:bg-gradient-to-r sm:from-black/85 sm:via-black/50 sm:to-transparent" />
         </div>
 
         {/* Hero Content */}
-        <div className="relative max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-start text-left z-10">
+        <div className="relative max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-center text-center sm:items-start sm:text-left z-10">
           <div className="max-w-3xl space-y-6">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight drop-shadow-md">
               Su Futuro y Patrimonio, <br />
