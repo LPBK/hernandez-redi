@@ -14,7 +14,7 @@ export default function Inicio() {
             backgroundImage: "url('/hero_villa.jpg')",
           }}
         >
-          <div className="absolute inset-0 bg-black/60 sm:bg-gradient-to-r sm:from-black/85 sm:via-black/50 sm:to-transparent" />
+          <div className="absolute inset-0 bg-black/20 sm:bg-gradient-to-r sm:from-black/15 sm:via-black/25 sm:to-transparent" />
         </div>
 
         {/* Hero Content */}
