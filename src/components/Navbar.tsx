@@ -28,9 +28,9 @@ export default function Navbar() {
               className="h-16 w-16 rounded-full shadow-lg border-2 border-white group-hover:scale-105 transition-transform duration-300"
             />
             <div className="flex flex-col text-white font-extrabold tracking-wide uppercase leading-tight text-sm md:text-base">
-              <span>Hernández Inmuebles</span>
+              <span>INMOBILIARIA DEL ATLANTICO </span>
               <span className="text-brand-green-light text-xs font-semibold normal-case">
-                &amp; Asociados
+                 LAS TERRENAS
               </span>
             </div>
           </Link>

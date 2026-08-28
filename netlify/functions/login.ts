@@ -26,7 +26,8 @@ export default async (request: Request) => {
     `;
 
     if (results && results.length > 0) {
-      return new Response(JSON.stringify({ success: true }), {
+      const user = results[0];
+      return new Response(JSON.stringify({ success: true, username: user.username }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       });

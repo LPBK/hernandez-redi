@@ -2,9 +2,17 @@ import { useAdmin } from '../context/AdminContext';
 import { FaUserShield, FaSignOutAlt } from 'react-icons/fa';
 
 export default function AdminBanner() {
-  const { isAdminMode, logout } = useAdmin();
+  const { isAdminMode, currentUser, canEditArquitectura, canEditInmobiliaria, logout } = useAdmin();
 
   if (!isAdminMode) return null;
+
+  const roleText = canEditArquitectura && canEditInmobiliaria
+    ? 'Edición Global (Arquitectura e Inmobiliaria)'
+    : canEditArquitectura
+    ? 'Edición de Arquitectura'
+    : canEditInmobiliaria
+    ? 'Edición de Inmobiliaria y Bienes Raíces'
+    : 'Modo Solo Lectura';
 
   return (
     <div className="fixed top-0 left-0 w-full h-10 bg-slate-900 border-b border-brand-green/30 text-white z-50 flex items-center justify-between px-4 sm:px-6 lg:px-8 text-xs select-none shadow-md">
@@ -15,10 +23,10 @@ export default function AdminBanner() {
         </span>
         <FaUserShield className="text-brand-green-light" size={14} />
         <span className="font-semibold tracking-wide">
-          Modo Administrador Activo
+          Modo Administrador ({currentUser || 'Admin'})
         </span>
         <span className="hidden sm:inline text-slate-400">
-          | Puede agregar, editar y eliminar propiedades o proyectos directamente
+          | Permiso activo: <span className="text-brand-green font-medium">{roleText}</span>
         </span>
       </div>
 

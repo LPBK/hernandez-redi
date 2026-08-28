@@ -77,7 +77,7 @@ export default function Juridico() {
       title: 'Derecho Penal',
       description: 'Defensa estratégica y representación comprometida en procesos delictivos.',
       icon: <FaShieldAlt size={24} />,
-      bgImage: '/penal.png',
+      bgImage: '/palaciojusticiasamana.jpg',
       subcategories: [
         {
           title: 'Defensa Penal y Representación',
@@ -146,6 +146,25 @@ export default function Juridico() {
             'Constitución y Regulación de Empresas.',
             'Contratos Mercantiles.',
             'Propiedad Intelectual y Protección de Marcas y Patentes.'
+          ]
+        }
+      ]
+    },
+        {
+      id: 'inmobiliario',
+      title: 'Derecho inmobiliario',
+      description: 'Gestión de derechos reales, deslindes y tramitaciones inmobiliarias.',
+      icon: <FaUniversity size={24} />,
+      bgImage: '/cortesfscmcori.jpg',
+      subcategories: [
+        {
+          title: 'SERVICIOS INMOBILIARIOS Y BIENES RAÍCES',
+          items: [
+            ' tranferencias inmobiliarias.',
+            'litis sobre derechos registrados',
+            'deslindes',
+            'sub divisiones y mesura',
+            'determionacion de herederos entre otros'
           ]
         }
       ]

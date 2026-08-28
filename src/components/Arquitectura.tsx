@@ -49,7 +49,7 @@ export default function Arquitectura() {
     }
   ];
 
-  const { projects, isAdminMode, addProject, updateProject, deleteProject } = useAdmin();
+  const { projects, canEditArquitectura, addProject, updateProject, deleteProject } = useAdmin();
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -212,7 +212,7 @@ export default function Arquitectura() {
           <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
             <h2 className="text-3xl font-extrabold text-brand-blue uppercase tracking-wide flex items-center justify-center gap-4 flex-wrap">
               <span>Portafolio de Arquitectura y Construcción</span>
-              {isAdminMode && (
+              {canEditArquitectura && (
                 <button
                   onClick={handleOpenAddModal}
                   className="px-4 py-2 bg-brand-green hover:bg-brand-green-light text-white text-xs font-bold rounded-xl shadow-md transition-all hover:scale-[1.02] cursor-pointer tracking-normal normal-case"
@@ -261,7 +261,7 @@ export default function Arquitectura() {
                     >
                       
                       {/* Admin controls overlay */}
-                      {isAdminMode && (
+                      {canEditArquitectura && (
                         <div className="absolute top-4 left-4 z-30 flex items-center gap-2">
                           <button
                             onClick={(e) => { e.stopPropagation(); handleOpenEditModal(proj); }}

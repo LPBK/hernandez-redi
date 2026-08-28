@@ -213,7 +213,11 @@ export default function Contactanos() {
                   </div>
                   <div className="flex items-center space-x-3">
                     <FaClock className="text-brand-green-light flex-shrink-0" size={16} />
-                    <span>Lunes a Sábado: 9:00 AM a 6:00 PM</span>
+                   
+                   <div>
+                     <span>Lunes a viernes: 9:00 AM a 6:00 PM</span>
+                      <p>Sábados: 8:00 AM - 3:00 PM</p>
+                    </div> 
                   </div>
                 </div>
               </div>

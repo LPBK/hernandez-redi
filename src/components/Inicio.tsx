@@ -21,7 +21,7 @@ export default function Inicio() {
         <div className="relative max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-center text-center sm:items-start sm:text-left z-10">
           <div className="max-w-3xl space-y-6">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight drop-shadow-md">
-              Su Futuro y Patrimonio, <br />
+              Su Futuro en las terrenas, <br />
               <span className="text-brand-green-light">Respaldados por Expertos</span> <br />
               en la Costa Atlántica
             </h1>

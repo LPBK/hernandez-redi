@@ -54,7 +54,7 @@ export default function Inmobiliaria() {
     }
   ];
 
-  const { properties, isAdminMode, addProperty, updateProperty, deleteProperty } = useAdmin();
+  const { properties, canEditInmobiliaria, addProperty, updateProperty, deleteProperty } = useAdmin();
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -254,7 +254,7 @@ export default function Inmobiliaria() {
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <h2 className="text-3xl font-extrabold text-brand-blue flex items-center justify-center gap-4 flex-wrap">
               <span>Propiedades Destacadas</span>
-              {isAdminMode && (
+              {canEditInmobiliaria && (
                 <button
                   onClick={handleOpenAddModal}
                   className="px-4 py-2 bg-brand-green hover:bg-brand-green-light text-white text-xs font-bold rounded-xl shadow-md transition-all hover:scale-[1.02] cursor-pointer"
@@ -316,7 +316,7 @@ export default function Inmobiliaria() {
                     <div key={prop.id} className="relative bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-md hover:shadow-xl hover:scale-[1.01] transition-all duration-300 flex flex-col group h-full">
                       
                       {/* Admin controls overlay */}
-                      {isAdminMode && (
+                      {canEditInmobiliaria && (
                         <div className="absolute top-4 left-4 z-30 flex items-center gap-2">
                           <button
                             onClick={() => handleOpenEditModal(prop)}

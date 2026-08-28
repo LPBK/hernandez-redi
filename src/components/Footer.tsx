@@ -16,10 +16,10 @@ export default function Footer() {
                 className="h-16 w-16 rounded-full border-2 border-white shadow-md bg-white"
               />
               <div className="flex flex-col font-extrabold tracking-wider uppercase text-sm leading-tight">
-                <span>Hernández Inmuebles</span>
-                <span className="text-brand-green-light text-xs font-semibold normal-case">
-                  &amp; Asociados
-                </span>
+              <span>INMOBILIARIA DEL ATLANTICO </span>
+              <span className="text-brand-green-light text-xs font-semibold normal-case">
+                 LAS TERRENAS
+              </span>
               </div>
             </div>
             <p className="text-sm text-gray-300 leading-relaxed pt-2">
@@ -79,7 +79,8 @@ export default function Footer() {
               </div>
               <div className="pt-2 border-t border-brand-blue-light/50">
                 <p className="font-semibold text-white">Horario de Atención:</p>
-                <p>Lunes a Sábado: 9:00 AM - 6:00 PM</p>
+                <p>Lunes a Viernes: 9:00 AM - 6:00 PM</p>
+                <p>Sábados: 8:00 AM - 3:00 PM</p>
               </div>
             </div>
           </div>

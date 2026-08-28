@@ -4,6 +4,9 @@ import type { Property, Project } from '../types';
 
 interface AdminContextType {
   isAdminMode: boolean;
+  currentUser: string | null;
+  canEditArquitectura: boolean;
+  canEditInmobiliaria: boolean;
   properties: Property[];
   projects: Project[];
   login: (username: string, pass: string) => Promise<boolean>;
@@ -21,6 +24,9 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined);
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [isAdminMode, setIsAdminMode] = useState<boolean>(() => {
     return sessionStorage.getItem('adminMode') === 'true';
+  });
+  const [currentUser, setCurrentUser] = useState<string | null>(() => {
+    return sessionStorage.getItem('adminUser');
   });
 
   const [properties, setProperties] = useState<Property[]>([]);
@@ -56,6 +62,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     fetchInitialData();
   }, []);
 
+  const normalizedUser = (currentUser || '').trim().toLowerCase();
+  const canEditArquitectura = isAdminMode && (normalizedUser === 'editah' || normalizedUser === 'admin');
+  const canEditInmobiliaria = isAdminMode && (normalizedUser === 'franciscoh' || normalizedUser === 'admin');
+
   const login = async (username: string, pass: string): Promise<boolean> => {
     try {
       const response = await fetch('/api/login', {
@@ -65,8 +75,12 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       });
 
       if (response.ok) {
+        const data = await response.json();
+        const loggedUser = data.username || username;
         setIsAdminMode(true);
+        setCurrentUser(loggedUser);
         sessionStorage.setItem('adminMode', 'true');
+        sessionStorage.setItem('adminUser', loggedUser);
         return true;
       }
       return false;
@@ -78,11 +92,17 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setIsAdminMode(false);
+    setCurrentUser(null);
     sessionStorage.removeItem('adminMode');
+    sessionStorage.removeItem('adminUser');
   };
 
-  // Property CRUD actions
+  // Property CRUD actions (inmobiliaria)
   const addProperty = async (newProp: Omit<Property, 'id'>) => {
+    if (!canEditInmobiliaria) {
+      alert('Permiso denegado: Solo el usuario franciscoh puede gestionar bienes raíces e inmuebles.');
+      return;
+    }
     try {
       const response = await fetch('/api/properties', {
         method: 'POST',
@@ -103,6 +123,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   };
 
   const updateProperty = async (updatedProp: Property) => {
+    if (!canEditInmobiliaria) {
+      alert('Permiso denegado: Solo el usuario franciscoh puede gestionar bienes raíces e inmuebles.');
+      return;
+    }
     try {
       const response = await fetch('/api/properties', {
         method: 'PUT',
@@ -122,6 +146,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteProperty = async (id: string) => {
+    if (!canEditInmobiliaria) {
+      alert('Permiso denegado: Solo el usuario franciscoh puede gestionar bienes raíces e inmuebles.');
+      return;
+    }
     try {
       const response = await fetch(`/api/properties?id=${id}`, {
         method: 'DELETE',
@@ -138,8 +166,12 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Project CRUD actions
+  // Project CRUD actions (arquitectura)
   const addProject = async (newProj: Omit<Project, 'id'>) => {
+    if (!canEditArquitectura) {
+      alert('Permiso denegado: Solo el usuario editah puede gestionar proyectos de arquitectura.');
+      return;
+    }
     try {
       const response = await fetch('/api/projects', {
         method: 'POST',
@@ -160,6 +192,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   };
 
   const updateProject = async (updatedProj: Project) => {
+    if (!canEditArquitectura) {
+      alert('Permiso denegado: Solo el usuario editah puede gestionar proyectos de arquitectura.');
+      return;
+    }
     try {
       const response = await fetch('/api/projects', {
         method: 'PUT',
@@ -179,6 +215,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteProject = async (id: string) => {
+    if (!canEditArquitectura) {
+      alert('Permiso denegado: Solo el usuario editah puede gestionar proyectos de arquitectura.');
+      return;
+    }
     try {
       const response = await fetch(`/api/projects?id=${id}`, {
         method: 'DELETE',
@@ -199,6 +239,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     <AdminContext.Provider
       value={{
         isAdminMode,
+        currentUser,
+        canEditArquitectura,
+        canEditInmobiliaria,
         properties,
         projects,
         login,
