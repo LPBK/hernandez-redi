@@ -1,12 +1,12 @@
 import { GiRotaryPhone } from 'react-icons/gi';
-import { FaFacebookF, FaTiktok, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaFacebookF, FaTiktok, FaInstagram, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 export default function Footer() {
   return (
     <footer className="bg-brand-blue text-white pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-12 border-b border-brand-blue-light">
-          
+
           {/* Logo and About Section */}
           <div className="flex flex-col space-y-4">
             <div className="flex items-center space-x-3">
@@ -16,10 +16,10 @@ export default function Footer() {
                 className="h-16 w-16 rounded-full border-2 border-white shadow-md bg-white"
               />
               <div className="flex flex-col font-extrabold tracking-wider uppercase text-sm leading-tight">
-              <span>INMOBILIARIA DEL ATLANTICO </span>
-              <span className="text-brand-green-light text-xs font-semibold normal-case">
-                 LAS TERRENAS
-              </span>
+                <span>INMOBILIARIA DEL ATLANTICO </span>
+                <span className="text-brand-green-light text-xs font-semibold normal-case">
+                  LAS TERRENAS
+                </span>
               </div>
             </div>
             <p className="text-sm text-gray-300 leading-relaxed pt-2">
@@ -27,10 +27,13 @@ export default function Footer() {
             </p>
             {/* Social Icons */}
             <div className="flex space-x-4 pt-3">
-              <a href="#" className="h-9 w-9 flex items-center justify-center rounded-full bg-brand-blue-light hover:bg-brand-green transition-colors duration-200 text-gray-200 hover:text-white" aria-label="Facebook">
+              <a href="https://www.facebook.com/profile.php?id=61593762608842" target="_blank" className="h-9 w-9 flex items-center justify-center rounded-full bg-brand-blue-light hover:bg-brand-green transition-colors duration-200 text-gray-200 hover:text-white" aria-label="Facebook">
                 <FaFacebookF size={16} />
               </a>
-              <a href="#" className="h-9 w-9 flex items-center justify-center rounded-full bg-brand-blue-light hover:bg-brand-green transition-colors duration-200 text-gray-200 hover:text-white" aria-label="TikTok">
+              <a href="https://www.instagram.com/inmobiliariadelatalantico/" target="_blank" className="h-9 w-9 flex items-center justify-center rounded-full bg-brand-blue-light hover:bg-brand-green transition-colors duration-200 text-gray-200 hover:text-white" aria-label="Facebook">
+                <FaInstagram size={16} />
+              </a>
+              <a href="https://www.tiktok.com/@inmobiliaria.del94?lang=es-419" target="_blank" className="h-9 w-9 flex items-center justify-center rounded-full bg-brand-blue-light hover:bg-brand-green transition-colors duration-200 text-gray-200 hover:text-white" aria-label="TikTok">
                 <FaTiktok size={16} />
               </a>
             </div>
