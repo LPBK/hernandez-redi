@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { Property, Project } from '../types';
+import { cleanInputString } from '../lib/security';
 
 interface AdminContextType {
   isAdminMode: boolean;
@@ -28,6 +29,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<string | null>(() => {
     return sessionStorage.getItem('adminUser');
   });
+  const [authToken, setAuthToken] = useState<string | null>(() => {
+    return sessionStorage.getItem('adminToken');
+  });
 
   const [properties, setProperties] = useState<Property[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -45,17 +49,17 @@ export function AdminProvider({ children }: { children: ReactNode }) {
           const propsData = await propsRes.json();
           setProperties(propsData);
         } else {
-          console.error('Error fetching properties:', propsRes.statusText);
+          console.error('Error fetching properties:', propsRes.status);
         }
 
         if (projsRes.ok) {
           const projsData = await projsRes.json();
           setProjects(projsData);
         } else {
-          console.error('Error fetching projects:', projsRes.statusText);
+          console.error('Error fetching projects:', projsRes.status);
         }
       } catch (err) {
-        console.error('Error loading initial data from Neon database:', err);
+        console.error('Error loading initial data:', err);
       }
     };
 
@@ -66,21 +70,43 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const canEditArquitectura = isAdminMode && (normalizedUser === 'editah' || normalizedUser === 'admin');
   const canEditInmobiliaria = isAdminMode && (normalizedUser === 'franciscoh' || normalizedUser === 'admin');
 
+  const logout = () => {
+    setIsAdminMode(false);
+    setCurrentUser(null);
+    setAuthToken(null);
+    sessionStorage.removeItem('adminMode');
+    sessionStorage.removeItem('adminUser');
+    sessionStorage.removeItem('adminToken');
+  };
+
+  const handleUnauthorized = () => {
+    alert('Su sesión ha expirado o no es válida. Por favor inicie sesión nuevamente.');
+    logout();
+  };
+
   const login = async (username: string, pass: string): Promise<boolean> => {
     try {
+      const sanitizedUser = cleanInputString(username, 50);
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password: pass }),
+        body: JSON.stringify({ username: sanitizedUser, password: pass }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        const loggedUser = data.username || username;
+        const loggedUser = data.username || sanitizedUser;
+        const token = data.token;
+
         setIsAdminMode(true);
         setCurrentUser(loggedUser);
+        setAuthToken(token);
+
         sessionStorage.setItem('adminMode', 'true');
         sessionStorage.setItem('adminUser', loggedUser);
+        if (token) {
+          sessionStorage.setItem('adminToken', token);
+        }
         return true;
       }
       return false;
@@ -88,13 +114,6 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       console.error('Login error:', error);
       return false;
     }
-  };
-
-  const logout = () => {
-    setIsAdminMode(false);
-    setCurrentUser(null);
-    sessionStorage.removeItem('adminMode');
-    sessionStorage.removeItem('adminUser');
   };
 
   // Property CRUD actions (inmobiliaria)
@@ -106,14 +125,23 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     try {
       const response = await fetch('/api/properties', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken || ''}`
+        },
         body: JSON.stringify(newProp),
       });
+
+      if (response.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+
       if (response.ok) {
         const result = await response.json();
         setProperties(prev => [{ ...newProp, id: result.id }, ...prev]);
       } else {
-        const errData = await response.json();
+        const errData = await response.json().catch(() => ({}));
         throw new Error(errData.error || 'Error al guardar la propiedad.');
       }
     } catch (error) {
@@ -130,13 +158,22 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     try {
       const response = await fetch('/api/properties', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken || ''}`
+        },
         body: JSON.stringify(updatedProp),
       });
+
+      if (response.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+
       if (response.ok) {
         setProperties(prev => prev.map(p => p.id === updatedProp.id ? updatedProp : p));
       } else {
-        const errData = await response.json();
+        const errData = await response.json().catch(() => ({}));
         throw new Error(errData.error || 'Error al actualizar la propiedad.');
       }
     } catch (error) {
@@ -151,13 +188,23 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       return;
     }
     try {
-      const response = await fetch(`/api/properties?id=${id}`, {
+      const safeId = encodeURIComponent(cleanInputString(id, 50));
+      const response = await fetch(`/api/properties?id=${safeId}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${authToken || ''}`
+        }
       });
+
+      if (response.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+
       if (response.ok) {
         setProperties(prev => prev.filter(p => p.id !== id));
       } else {
-        const errData = await response.json();
+        const errData = await response.json().catch(() => ({}));
         throw new Error(errData.error || 'Error al eliminar la propiedad.');
       }
     } catch (error) {
@@ -175,14 +222,23 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     try {
       const response = await fetch('/api/projects', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken || ''}`
+        },
         body: JSON.stringify(newProj),
       });
+
+      if (response.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+
       if (response.ok) {
         const result = await response.json();
         setProjects(prev => [{ ...newProj, id: result.id }, ...prev]);
       } else {
-        const errData = await response.json();
+        const errData = await response.json().catch(() => ({}));
         throw new Error(errData.error || 'Error al guardar el proyecto.');
       }
     } catch (error) {
@@ -199,13 +255,22 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     try {
       const response = await fetch('/api/projects', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken || ''}`
+        },
         body: JSON.stringify(updatedProj),
       });
+
+      if (response.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+
       if (response.ok) {
         setProjects(prev => prev.map(p => p.id === updatedProj.id ? updatedProj : p));
       } else {
-        const errData = await response.json();
+        const errData = await response.json().catch(() => ({}));
         throw new Error(errData.error || 'Error al actualizar el proyecto.');
       }
     } catch (error) {
@@ -220,13 +285,23 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       return;
     }
     try {
-      const response = await fetch(`/api/projects?id=${id}`, {
+      const safeId = encodeURIComponent(cleanInputString(id, 50));
+      const response = await fetch(`/api/projects?id=${safeId}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${authToken || ''}`
+        }
       });
+
+      if (response.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+
       if (response.ok) {
         setProjects(prev => prev.filter(p => p.id !== id));
       } else {
-        const errData = await response.json();
+        const errData = await response.json().catch(() => ({}));
         throw new Error(errData.error || 'Error al eliminar el proyecto.');
       }
     } catch (error) {

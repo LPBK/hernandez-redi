@@ -5,6 +5,7 @@ import Carousel from './Carousel';
 import Footer from './Footer';
 import { useAdmin } from '../context/AdminContext';
 import type { Property } from '../types';
+import { cleanInputString } from '../lib/security';
 
 export default function Inmobiliaria() {
   const services = [
@@ -122,9 +123,14 @@ export default function Inmobiliaria() {
   };
 
   const handleAddImageUrl = () => {
-    if (newImageUrl.trim()) {
-      setFormImages(prev => [...prev, newImageUrl.trim()]);
-      setNewImageUrl('');
+    const trimmed = newImageUrl.trim();
+    if (trimmed) {
+      if (/^https?:\/\//i.test(trimmed) || trimmed.startsWith('/')) {
+        setFormImages(prev => [...prev, trimmed]);
+        setNewImageUrl('');
+      } else {
+        alert('Por favor ingrese una URL válida que comience con https://');
+      }
     }
   };
 
@@ -136,6 +142,14 @@ export default function Inmobiliaria() {
     const files = e.target.files;
     if (files) {
       Array.from(files).forEach(file => {
+        if (!file.type.startsWith('image/')) {
+          alert('Solo se permiten archivos de imagen (JPEG, PNG, WEBP).');
+          return;
+        }
+        if (file.size > 4 * 1024 * 1024) {
+          alert(`El archivo ${file.name} supera el límite de 4MB.`);
+          return;
+        }
         const reader = new FileReader();
         reader.onloadend = () => {
           const base64 = reader.result as string;
@@ -151,7 +165,7 @@ export default function Inmobiliaria() {
     const message = `Hola, estoy interesado en la propiedad:\n\n*${prop.title}*\n*Precio:* ${formattedPrice}\n*Ubicación:* ${prop.location}\n\n¿Podrían darme más información?`;
     const encodedMessage = encodeURIComponent(message);
     const url = `https://wa.me/18297709011?text=${encodedMessage}`;
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const handleEmailClick = (prop: Property) => {
@@ -168,17 +182,26 @@ export default function Inmobiliaria() {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
 
+    const cleanTitle = cleanInputString(formTitle, 150);
+    const cleanLocation = cleanInputString(formLocation, 200);
+    const cleanDescription = cleanInputString(formDescription, 4000);
+
+    if (!cleanTitle || !cleanLocation) {
+      alert('El título y la ubicación son obligatorios.');
+      return;
+    }
+
     const propertyData = {
-      title: formTitle,
+      title: cleanTitle,
       category: formCategory,
       type: formType,
-      price: Number(formPrice) || 0,
+      price: Math.max(0, Number(formPrice) || 0),
       currency: formCurrency,
-      location: formLocation,
-      area: Number(formArea) || 0,
-      bedrooms: Number(formBedrooms) || 0,
-      bathrooms: Number(formBathrooms) || 0,
-      description: formDescription,
+      location: cleanLocation,
+      area: Math.max(0, Number(formArea) || 0),
+      bedrooms: Math.max(0, Number(formBedrooms) || 0),
+      bathrooms: Math.max(0, Number(formBathrooms) || 0),
+      description: cleanDescription,
       images: formImages.length > 0 ? formImages : ['/samana.png'],
       featured: true
     };

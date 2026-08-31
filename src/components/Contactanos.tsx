@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import Footer from './Footer';
+import { cleanInputString, isValidEmail } from '../lib/security';
 
 export default function Contactanos() {
   const location = useLocation();
@@ -10,15 +11,16 @@ export default function Contactanos() {
     nombre: '',
     email: '',
     sujeto: 'Consulta General',
-    mensaje: ''
+    mensaje: '',
+    website: '' // Honeypot field
   });
 
   useEffect(() => {
     if (location.state && (location.state as any).subject) {
       setFormData(prev => ({
         ...prev,
-        sujeto: (location.state as any).subject,
-        mensaje: (location.state as any).message || ''
+        sujeto: cleanInputString((location.state as any).subject, 100),
+        mensaje: cleanInputString((location.state as any).message || '', 2000)
       }));
     }
   }, [location.state]);
@@ -32,6 +34,23 @@ export default function Contactanos() {
     setLoading(true);
     setErrorMsg('');
 
+    const cleanNombre = cleanInputString(formData.nombre, 100);
+    const cleanEmail = formData.email.trim();
+    const cleanSujeto = cleanInputString(formData.sujeto, 100);
+    const cleanMensaje = cleanInputString(formData.mensaje, 3000);
+
+    if (!cleanNombre || !cleanEmail || !cleanMensaje) {
+      setErrorMsg('Por favor complete todos los campos obligatorios.');
+      setLoading(false);
+      return;
+    }
+
+    if (!isValidEmail(cleanEmail)) {
+      setErrorMsg('Por favor ingrese un correo electrónico válido (ej. usuario@dominio.com).');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch('/api/send-email', {
         method: 'POST',
@@ -39,24 +58,25 @@ export default function Contactanos() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_name: formData.nombre,
-          user_email: formData.email,
-          subject: formData.sujeto,
-          message: formData.mensaje
+          user_name: cleanNombre,
+          user_email: cleanEmail,
+          subject: cleanSujeto,
+          message: cleanMensaje,
+          website: formData.website // Honeypot
         })
       });
 
-      const resData = await response.json();
+      const resData = await response.json().catch(() => ({}));
 
       if (response.ok) {
         setSubmitted(true);
-        setFormData({ nombre: '', email: '', sujeto: 'Consulta General', mensaje: '' });
+        setFormData({ nombre: '', email: '', sujeto: 'Consulta General', mensaje: '', website: '' });
       } else {
         setErrorMsg(resData.error || 'Hubo un error al enviar el correo.');
       }
     } catch (err) {
       console.error(err);
-      setErrorMsg('No se pudo establecer conexión con el servidor de correos. Asegúrate de ejecutar el entorno con "vercel dev" localmente.');
+      setErrorMsg('No se pudo establecer conexión con el servidor de correos. Intente nuevamente en unos minutos.');
     } finally {
       setLoading(false);
     }
@@ -73,14 +93,14 @@ export default function Contactanos() {
     const message = "Hola Dr. Francisco Hernández, me comunico a través de la web. Me gustaría realizar una consulta legal.";
     const encodedMessage = encodeURIComponent(message);
     const url = `https://wa.me/18297709011?text=${encodedMessage}`;
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const handleWhatsAppEdita = () => {
     const message = "Hola Arq. Edita Hernández, me comunico a través de la web. Me gustaría realizar una consulta sobre un proyecto de arquitectura/construcción.";
     const encodedMessage = encodeURIComponent(message);
     const url = `https://wa.me/18099139331?text=${encodedMessage}`;
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -90,7 +110,7 @@ export default function Contactanos() {
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
-            {/* Left Column: Redesigned Contact Form */}
+            {/* Left Column: Contact Form */}
             <div className="lg:col-span-7 bg-white rounded-2xl p-8 lg:p-12 shadow-xl border border-slate-100 space-y-8">
               <div className="space-y-2">
                 <h1 className="text-3xl font-extrabold text-brand-blue tracking-tight">
@@ -107,6 +127,20 @@ export default function Contactanos() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Anti-spam honeypot (hidden from human users) */}
+                  <div className="hidden" aria-hidden="true" style={{ display: 'none' }}>
+                    <label htmlFor="website">Website</label>
+                    <input
+                      type="text"
+                      id="website"
+                      name="website"
+                      value={formData.website}
+                      onChange={handleChange}
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="flex flex-col space-y-2">
                       <label htmlFor="nombre" className="text-xs font-bold text-brand-blue uppercase tracking-wider">
@@ -117,6 +151,7 @@ export default function Contactanos() {
                         name="nombre"
                         id="nombre"
                         required
+                        maxLength={100}
                         value={formData.nombre}
                         onChange={handleChange}
                         placeholder="Ej. Juan Pérez"
@@ -132,6 +167,7 @@ export default function Contactanos() {
                         name="email"
                         id="email"
                         required
+                        maxLength={120}
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="Ej. juan@correo.com"
@@ -167,6 +203,7 @@ export default function Contactanos() {
                       name="mensaje"
                       id="mensaje"
                       required
+                      maxLength={3000}
                       rows={5}
                       value={formData.mensaje}
                       onChange={handleChange}
@@ -192,7 +229,7 @@ export default function Contactanos() {
               )}
             </div>
 
-            {/* Right Column: "Hablemos Directamente" with Professional Contacts */}
+            {/* Right Column: Professional Contacts */}
             <div className="lg:col-span-5 space-y-8 flex flex-col">
               
               {/* Main Callout Box */}

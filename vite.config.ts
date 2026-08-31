@@ -7,6 +7,12 @@ function netlifyDevApiPlugin(): Plugin {
     name: 'netlify-dev-api',
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
+        // Set Security Headers on local dev requests
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.setHeader('X-Frame-Options', 'DENY');
+        res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+        res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
         if (!req.url?.startsWith('/api/')) {
           return next();
         }
@@ -18,16 +24,16 @@ function netlifyDevApiPlugin(): Plugin {
           let handler: ((request: Request) => Promise<Response>) | null = null;
 
           if (pathname === '/api/login') {
-            const mod = await import('./netlify/functions/login');
+            const mod = await import('./netlify/functions/login.ts');
             handler = mod.default;
           } else if (pathname === '/api/properties') {
-            const mod = await import('./netlify/functions/properties');
+            const mod = await import('./netlify/functions/properties.ts');
             handler = mod.default;
           } else if (pathname === '/api/projects') {
-            const mod = await import('./netlify/functions/projects');
+            const mod = await import('./netlify/functions/projects.ts');
             handler = mod.default;
           } else if (pathname === '/api/send-email') {
-            const mod = await import('./netlify/functions/send-email');
+            const mod = await import('./netlify/functions/send-email.ts');
             handler = mod.default;
           }
 
@@ -61,7 +67,8 @@ function netlifyDevApiPlugin(): Plugin {
           console.error('Error in local API middleware:', err);
           res.statusCode = 500;
           res.setHeader('Content-Type', 'application/json');
-          res.end(JSON.stringify({ error: err.message || 'Internal Server Error' }));
+          res.setHeader('X-Content-Type-Options', 'nosniff');
+          res.end(JSON.stringify({ error: 'Error interno en el servidor local.' }));
         }
       });
     },
@@ -73,12 +80,27 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   if (env.DATABASE_URL) process.env.DATABASE_URL = env.DATABASE_URL;
   if (env.RESEND_API_KEY) process.env.RESEND_API_KEY = env.RESEND_API_KEY;
+  if (env.ADMIN_JWT_SECRET) process.env.ADMIN_JWT_SECRET = env.ADMIN_JWT_SECRET;
 
   return {
     plugins: [react(), tailwindcss(), netlifyDevApiPlugin()],
     server: {
       hmr: {
         overlay: false,
+      },
+    },
+    build: {
+      // Prevent source code leakage in production builds
+      sourcemap: false,
+      minify: true,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
+          },
+        },
       },
     },
   };

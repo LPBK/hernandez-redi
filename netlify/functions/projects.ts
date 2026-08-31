@@ -1,4 +1,11 @@
-import { sql } from './db-client';
+import { sql } from './db-client.js';
+import { 
+  verifyAuthToken, 
+  getSecurityHeaders, 
+  sanitizeString, 
+  sanitizeImageUrl, 
+  createSafeErrorResponse 
+} from './security.js';
 
 export default async (request: Request) => {
   const method = request.method;
@@ -11,13 +18,33 @@ export default async (request: Request) => {
       `;
       return new Response(JSON.stringify(projects), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: getSecurityHeaders(),
       });
     }
 
+    // Require authorization for mutating operations
+    const authHeader = request.headers.get('Authorization');
+    const authPayload = await verifyAuthToken(authHeader);
+
+    if (!authPayload) {
+      return createSafeErrorResponse(401, 'No autorizado: Token de sesión inválido o expirado.');
+    }
+
+    // Check Role Permission (only editah or admin can manage architecture projects)
+    if (authPayload.role !== 'editah' && authPayload.role !== 'admin') {
+      return createSafeErrorResponse(403, 'Acceso denegado: No cuenta con permisos para modificar proyectos de arquitectura.');
+    }
+
     if (method === 'POST') {
-      const body = await request.json();
-      const { title, location, image } = body;
+      const rawBody = await request.json().catch(() => ({}));
+      const title = sanitizeString(rawBody.title, 150);
+      const location = sanitizeString(rawBody.location, 200);
+      const rawImage = sanitizeImageUrl(rawBody.image);
+      const image = rawImage || '/samana.png';
+
+      if (!title || !location) {
+        return createSafeErrorResponse(400, 'El título y la ubicación son campos obligatorios.');
+      }
       
       const id = `proj-${Date.now()}`;
 
@@ -28,13 +55,22 @@ export default async (request: Request) => {
 
       return new Response(JSON.stringify({ success: true, id }), {
         status: 201,
-        headers: { 'Content-Type': 'application/json' },
+        headers: getSecurityHeaders(),
       });
     }
 
     if (method === 'PUT') {
-      const body = await request.json();
-      const { id, title, location, image } = body;
+      const rawBody = await request.json().catch(() => ({}));
+      const id = sanitizeString(rawBody.id, 50);
+
+      if (!id) {
+        return createSafeErrorResponse(400, 'ID de proyecto requerido para actualizar.');
+      }
+
+      const title = sanitizeString(rawBody.title, 150);
+      const location = sanitizeString(rawBody.location, 200);
+      const rawImage = sanitizeImageUrl(rawBody.image);
+      const image = rawImage || '/samana.png';
 
       await sql`
         UPDATE projects
@@ -46,19 +82,17 @@ export default async (request: Request) => {
 
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: getSecurityHeaders(),
       });
     }
 
     if (method === 'DELETE') {
       const url = new URL(request.url);
-      const id = url.searchParams.get('id');
+      const rawId = url.searchParams.get('id');
+      const id = sanitizeString(rawId, 50);
 
       if (!id) {
-        return new Response(JSON.stringify({ error: 'ID de proyecto requerido.' }), {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        });
+        return createSafeErrorResponse(400, 'ID de proyecto válido requerido.');
       }
 
       await sql`
@@ -68,21 +102,15 @@ export default async (request: Request) => {
 
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: getSecurityHeaders(),
       });
     }
 
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return createSafeErrorResponse(405, 'Método no permitido.');
 
   } catch (error) {
     console.error('Error in projects handler:', error);
-    return new Response(JSON.stringify({ error: (error as Error).message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return createSafeErrorResponse(500, 'Error interno al procesar la operación sobre proyectos.');
   }
 };
 

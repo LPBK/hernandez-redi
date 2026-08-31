@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAdmin } from '../context/AdminContext';
 import { FaLock, FaUser, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { cleanInputString } from '../lib/security';
 
 export default function LoginModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,24 +43,27 @@ export default function LoginModal() {
     e.preventDefault();
     setError('');
 
-    if (!username || !password) {
+    const cleanUser = cleanInputString(username, 50);
+    const cleanPass = password.trim();
+
+    if (!cleanUser || !cleanPass) {
       setError('Por favor complete todos los campos.');
       return;
     }
 
     setLoading(true);
     try {
-      const success = await login(username, password);
+      const success = await login(cleanUser, cleanPass);
       if (success) {
         setIsOpen(false);
         setUsername('');
         setPassword('');
       } else {
-        setError('Credenciales inválidas. Intente de nuevo.');
+        setError('Credenciales inválidas o acceso denegado.');
       }
     } catch (err) {
       console.error(err);
-      setError('Error de conexión con el servidor de bases de datos.');
+      setError('Error de conexión o demasiados intentos. Por favor intente más tarde.');
     } finally {
       setLoading(false);
     }
@@ -120,6 +124,7 @@ export default function LoginModal() {
               <input
                 type="text"
                 disabled={loading}
+                maxLength={50}
                 value={username}
                 onChange={e => setUsername(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all disabled:opacity-50"
@@ -140,6 +145,7 @@ export default function LoginModal() {
               <input
                 type={showPassword ? 'text' : 'password'}
                 disabled={loading}
+                maxLength={100}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 className="w-full pl-10 pr-10 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all disabled:opacity-50"

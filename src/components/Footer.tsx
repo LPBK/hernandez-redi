@@ -27,13 +27,13 @@ export default function Footer() {
             </p>
             {/* Social Icons */}
             <div className="flex space-x-4 pt-3">
-              <a href="https://www.facebook.com/profile.php?id=61593762608842" target="_blank" className="h-9 w-9 flex items-center justify-center rounded-full bg-brand-blue-light hover:bg-brand-green transition-colors duration-200 text-gray-200 hover:text-white" aria-label="Facebook">
+              <a href="https://www.facebook.com/profile.php?id=61593762608842" target="_blank" rel="noopener noreferrer" className="h-9 w-9 flex items-center justify-center rounded-full bg-brand-blue-light hover:bg-brand-green transition-colors duration-200 text-gray-200 hover:text-white" aria-label="Facebook">
                 <FaFacebookF size={16} />
               </a>
-              <a href="https://www.instagram.com/inmobiliariadelatalantico/" target="_blank" className="h-9 w-9 flex items-center justify-center rounded-full bg-brand-blue-light hover:bg-brand-green transition-colors duration-200 text-gray-200 hover:text-white" aria-label="Facebook">
+              <a href="https://www.instagram.com/inmobiliariadelatalantico/" target="_blank" rel="noopener noreferrer" className="h-9 w-9 flex items-center justify-center rounded-full bg-brand-blue-light hover:bg-brand-green transition-colors duration-200 text-gray-200 hover:text-white" aria-label="Instagram">
                 <FaInstagram size={16} />
               </a>
-              <a href="https://www.tiktok.com/@inmobiliaria.del94?lang=es-419" target="_blank" className="h-9 w-9 flex items-center justify-center rounded-full bg-brand-blue-light hover:bg-brand-green transition-colors duration-200 text-gray-200 hover:text-white" aria-label="TikTok">
+              <a href="https://www.tiktok.com/@inmobiliaria.del94?lang=es-419" target="_blank" rel="noopener noreferrer" className="h-9 w-9 flex items-center justify-center rounded-full bg-brand-blue-light hover:bg-brand-green transition-colors duration-200 text-gray-200 hover:text-white" aria-label="TikTok">
                 <FaTiktok size={16} />
               </a>
             </div>

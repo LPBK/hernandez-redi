@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 import { useAdmin } from '../context/AdminContext';
 import type { Project } from '../types';
+import { cleanInputString } from '../lib/security';
 
 export default function Arquitectura() {
   const services = [
@@ -86,7 +87,7 @@ export default function Arquitectura() {
     const message = `Hola Arq. Edita Hernández, me interesa su proyecto de arquitectura:\n\n*${proj.title}*\n*Ubicación:* ${proj.location}\n\n¿Podríamos coordinar una consulta al respecto?`;
     const encodedMessage = encodeURIComponent(message);
     const url = `https://wa.me/18099139331?text=${encodedMessage}`;
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const handleEmailEditaClick = (proj: Project) => {
@@ -102,6 +103,14 @@ export default function Arquitectura() {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Solo se permiten archivos de imagen (JPEG, PNG, WEBP).');
+        return;
+      }
+      if (file.size > 4 * 1024 * 1024) {
+        alert(`El archivo supera el límite de 4MB.`);
+        return;
+      }
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64 = reader.result as string;
@@ -113,9 +122,18 @@ export default function Arquitectura() {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const cleanTitle = cleanInputString(formTitle, 150);
+    const cleanLocation = cleanInputString(formLocation, 200);
+
+    if (!cleanTitle || !cleanLocation) {
+      alert('El título y la ubicación del proyecto son obligatorios.');
+      return;
+    }
+
     const projectData = {
-      title: formTitle,
-      location: formLocation,
+      title: cleanTitle,
+      location: cleanLocation,
       image: formImage.trim() || '/samana.png'
     };
 
