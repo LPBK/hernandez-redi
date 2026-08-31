@@ -107,9 +107,9 @@ export default function Contactanos() {
     <>
       <section className="bg-slate-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            
+
             {/* Left Column: Contact Form */}
             <div className="lg:col-span-7 bg-white rounded-2xl p-8 lg:p-12 shadow-xl border border-slate-100 space-y-8">
               <div className="space-y-2">
@@ -155,7 +155,7 @@ export default function Contactanos() {
                         value={formData.nombre}
                         onChange={handleChange}
                         placeholder="Ej. Juan Pérez"
-                        className="px-4 py-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-brand-green transition-colors duration-200"
+                        className="px-4 py-3 rounded-lg border border-slate-200 text-sm focus:outline-none transition-colors duration-200"
                       />
                     </div>
                     <div className="flex flex-col space-y-2">
@@ -171,7 +171,7 @@ export default function Contactanos() {
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="Ej. juan@correo.com"
-                        className="px-4 py-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-brand-green transition-colors duration-200"
+                        className="px-4 py-3 rounded-lg border text-sm focus:outline-none focus:border-brand-green transition-colors duration-200"
                       />
                     </div>
                   </div>
@@ -185,7 +185,7 @@ export default function Contactanos() {
                       id="sujeto"
                       value={formData.sujeto}
                       onChange={handleChange}
-                      className="px-4 py-3 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:border-brand-green transition-colors duration-200"
+                      className="px-4 py-3 rounded-lg border text-sm bg-white focus:outline-none focus:border-brand-green transition-colors duration-200"
                     >
                       <option value="Consulta General">Consulta General</option>
                       <option value="Servicios Inmobiliarios">Bienes Raíces / Inmobiliaria</option>
@@ -208,7 +208,7 @@ export default function Contactanos() {
                       value={formData.mensaje}
                       onChange={handleChange}
                       placeholder="Escriba aquí los detalles de su requerimiento..."
-                      className="px-4 py-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-brand-green transition-colors duration-200 resize-none"
+                      className="px-4 py-3 rounded-lg border text-sm focus:outline-none focus:border-brand-green transition-colors duration-200 resize-none"
                     />
                   </div>
 
@@ -221,7 +221,7 @@ export default function Contactanos() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full sm:w-auto px-8 py-3.5 bg-brand-green hover:bg-brand-green-dark text-white font-bold tracking-wider text-sm rounded-lg shadow hover:shadow-lg transition-all duration-200 uppercase disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-brand-green hover:bg-brand-green-dark text-white font-bold tracking-wider text-sm rounded-lg shadow hover:shadow-lg transition-all duration-200 uppercase disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? 'Enviando...' : 'Enviar Mensaje'}
                   </button>
@@ -231,36 +231,36 @@ export default function Contactanos() {
 
             {/* Right Column: Professional Contacts */}
             <div className="lg:col-span-5 space-y-8 flex flex-col">
-              
+
               {/* Main Callout Box */}
               <div className="bg-brand-blue text-white rounded-2xl p-8 lg:p-10 shadow-xl space-y-6">
                 <h2 className="text-2xl font-extrabold tracking-wide uppercase border-b border-brand-blue-light pb-4">
                   Hablemos Directamente
                 </h2>
-                
+
                 {/* General Contacts */}
                 <div className="space-y-4 text-sm text-gray-300">
                   <div className="flex items-start space-x-3">
-                    <FaMapMarkerAlt className="text-brand-green-light mt-1 flex-shrink-0" size={18} />
+                    <FaMapMarkerAlt className="text-brand-green-light mt-1 shrink-0" size={18} />
                     <span>Calle Juan Pablo Duarte #60, Centro de la Ciudad, Las Terrenas, RD.</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <FaEnvelope className="text-brand-green-light flex-shrink-0" size={16} />
+                    <FaEnvelope className="text-brand-green-light shrink-0" size={16} />
                     <span>inmobiliariadelatalantico@gmail.com</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <FaClock className="text-brand-green-light flex-shrink-0" size={16} />
-                   
-                   <div>
-                     <span>Lunes a viernes: 9:00 AM a 6:00 PM</span>
+                    <FaClock className="text-brand-green-light shrink-0" size={16} />
+
+                    <div>
+                      <span>Lunes a viernes: 9:00 AM a 6:00 PM</span>
                       <p>Sábados: 8:00 AM - 3:00 PM</p>
-                    </div> 
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Profiles Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 flex-grow">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 grow">
                 {/* Francisco Card */}
                 <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-md flex flex-col justify-between space-y-4 hover:shadow-lg transition-shadow duration-300">
                   <div className="space-y-2">

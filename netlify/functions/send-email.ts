@@ -1,11 +1,11 @@
 import { Resend } from 'resend';
-import { 
-  checkRateLimit, 
-  getSecurityHeaders, 
-  sanitizeString, 
-  sanitizeEmail, 
-  escapeHtml, 
-  createSafeErrorResponse 
+import {
+  checkRateLimit,
+  getSecurityHeaders,
+  sanitizeString,
+  sanitizeEmail,
+  escapeHtml,
+  createSafeErrorResponse
 } from './security.js';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -23,7 +23,7 @@ export default async (request: Request) => {
 
   try {
     const rawBody = await request.json().catch(() => ({}));
-    
+
     // Honeypot field check to block bot spam
     if (rawBody.website || rawBody.honeypot) {
       // Silently accept without sending to deceive bots
@@ -48,7 +48,7 @@ export default async (request: Request) => {
     const safeSubject = escapeHtml(subject || 'Nueva Consulta Web');
     const safeMessage = escapeHtml(message);
 
-    const { data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: 'Contacto Web <onboarding@resend.dev>',
       to: ['inmobiliariadelatalantico@gmail.com'],
       replyTo: userEmail,

@@ -150,7 +150,7 @@ export default function Juridico() {
         }
       ]
     },
-        {
+    {
       id: 'inmobiliario',
       title: 'Derecho inmobiliario',
       description: 'Gestión de derechos reales, deslindes y tramitaciones inmobiliarias.',
@@ -197,18 +197,17 @@ export default function Juridico() {
       {/* Main Content with Tabs */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           {/* Tab Buttons */}
           <div className="flex flex-wrap justify-center gap-4 mb-16">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setActiveTab(cat.id)}
-                className={`flex items-center space-x-2.5 px-6 py-3.5 rounded-lg text-sm font-bold tracking-wide transition-all duration-300 shadow ${
-                  activeTab === cat.id
+                className={`flex items-center space-x-2.5 px-6 py-3.5 rounded-lg text-sm font-bold tracking-wide transition-all duration-300 shadow ${activeTab === cat.id
                     ? 'bg-brand-green text-white scale-[1.02]'
                     : 'bg-white text-brand-blue hover:bg-brand-blue-light hover:text-white'
-                }`}
+                  }`}
               >
                 {cat.icon}
                 <span>{cat.title}</span>
@@ -219,7 +218,7 @@ export default function Juridico() {
           {/* Active Tab Panel */}
           <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden transition-all duration-500">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 p-8 lg:p-12">
-              
+
               {/* Left Side: Summary Image & Info */}
               <div className="lg:col-span-4 flex flex-col items-center lg:items-start space-y-6 border-b lg:border-b-0 lg:border-r border-slate-100 pb-8 lg:pb-0 lg:pr-8">
                 <img
@@ -248,7 +247,7 @@ export default function Juridico() {
                       <ul className="space-y-2.5">
                         {sub.items.map((item, idx) => (
                           <li key={idx} className="flex items-start text-sm text-gray-600 leading-relaxed">
-                            <span className="h-1.5 w-1.5 rounded-full bg-brand-blue mt-2 mr-2.5 flex-shrink-0" />
+                            <span className="h-1.5 w-1.5 rounded-full bg-brand-blue mt-2 mr-2.5 shrink-0" />
                             <span>{item}</span>
                           </li>
                         ))}

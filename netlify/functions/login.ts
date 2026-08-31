@@ -1,10 +1,10 @@
 import { sql } from './db-client.js';
-import { 
-  checkRateLimit, 
-  getSecurityHeaders, 
-  sanitizeString, 
-  createAuthToken, 
-  createSafeErrorResponse 
+import {
+  checkRateLimit,
+  getSecurityHeaders,
+  sanitizeString,
+  createAuthToken,
+  createSafeErrorResponse
 } from './security.js';
 
 export default async (request: Request) => {
@@ -14,7 +14,7 @@ export default async (request: Request) => {
 
   // Get client IP or fallback identifier for rate limiting
   const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'anonymous-client';
-  
+
   // Max 10 attempts per minute per IP to prevent brute-force attacks
   if (!checkRateLimit(`login-${clientIp}`, 10, 60000)) {
     return createSafeErrorResponse(429, 'Demasiados intentos fallidos. Por favor espere 1 minuto antes de reintentar.');
@@ -39,7 +39,7 @@ export default async (request: Request) => {
     if (results && results.length > 0) {
       const user = results[0];
       const normalizedUser = (user.username || '').toLowerCase().trim();
-      
+
       let role: 'admin' | 'editah' | 'franciscoh' = 'admin';
       if (normalizedUser === 'editah') role = 'editah';
       else if (normalizedUser === 'franciscoh') role = 'franciscoh';
@@ -47,8 +47,8 @@ export default async (request: Request) => {
       // Generate signed cryptographic token (valid for 24h)
       const token = await createAuthToken(user.username, role, 24);
 
-      return new Response(JSON.stringify({ 
-        success: true, 
+      return new Response(JSON.stringify({
+        success: true,
         username: user.username,
         role,
         token

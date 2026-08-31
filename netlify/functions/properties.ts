@@ -1,11 +1,11 @@
 import { sql } from './db-client.js';
-import { 
-  verifyAuthToken, 
-  getSecurityHeaders, 
-  sanitizeString, 
-  sanitizeNumber, 
-  sanitizeImages, 
-  createSafeErrorResponse 
+import {
+  verifyAuthToken,
+  getSecurityHeaders,
+  sanitizeString,
+  sanitizeNumber,
+  sanitizeImages,
+  createSafeErrorResponse
 } from './security.js';
 
 const ALLOWED_CATEGORIES = ['casa', 'apartamento', 'terreno'] as const;
@@ -22,7 +22,7 @@ export default async (request: Request) => {
         SELECT * FROM properties 
         ORDER BY id DESC
       `;
-      
+
       const formatted = properties.map(p => ({
         ...p,
         price: Number(p.price) || 0,
@@ -54,7 +54,7 @@ export default async (request: Request) => {
 
     if (method === 'POST') {
       const rawBody = await request.json().catch(() => ({}));
-      
+
       const title = sanitizeString(rawBody.title, 150);
       const description = sanitizeString(rawBody.description, 4000);
       const location = sanitizeString(rawBody.location, 200);
@@ -63,22 +63,22 @@ export default async (request: Request) => {
       const bathrooms = sanitizeNumber(rawBody.bathrooms, 0, 100);
       const area = sanitizeNumber(rawBody.area, 0, 10000000);
       const featured = Boolean(rawBody.featured);
-      
+
       const currency = ALLOWED_CURRENCIES.includes(rawBody.currency) ? rawBody.currency : 'USD';
       const category = ALLOWED_CATEGORIES.includes(rawBody.category) ? rawBody.category : 'casa';
       const type = ALLOWED_TYPES.includes(rawBody.type) ? rawBody.type : 'venta';
-      
+
       const images = sanitizeImages(rawBody.images, 20);
 
       if (!title || !location) {
         return createSafeErrorResponse(400, 'El título y la ubicación son campos obligatorios.');
       }
-      
+
       const id = `prop-${Date.now()}`;
 
       await sql`
         INSERT INTO properties (id, title, description, price, currency, location, bedrooms, bathrooms, area, type, category, images, featured)
-        VALUES (${id}, ${title}, ${description}, ${price}, ${currency}, ${location}, ${bedrooms}, ${bathrooms}, ${area}, ${type}, ${category}, ${JSON.stringify(images)}, ${featured})
+        VALUES (${id}, ${title}, ${description}, ${price}, ${currency}, ${location}, ${bedrooms}, ${bathrooms}, ${area}, ${type}, ${category}, ${images}, ${featured})
       `;
 
       return new Response(JSON.stringify({ success: true, id }), {
@@ -103,11 +103,11 @@ export default async (request: Request) => {
       const bathrooms = sanitizeNumber(rawBody.bathrooms, 0, 100);
       const area = sanitizeNumber(rawBody.area, 0, 10000000);
       const featured = Boolean(rawBody.featured);
-      
+
       const currency = ALLOWED_CURRENCIES.includes(rawBody.currency) ? rawBody.currency : 'USD';
       const category = ALLOWED_CATEGORIES.includes(rawBody.category) ? rawBody.category : 'casa';
       const type = ALLOWED_TYPES.includes(rawBody.type) ? rawBody.type : 'venta';
-      
+
       const images = sanitizeImages(rawBody.images, 20);
 
       await sql`
@@ -122,7 +122,7 @@ export default async (request: Request) => {
             area = ${area},
             type = ${type},
             category = ${category},
-            images = ${JSON.stringify(images)},
+            images = ${images},
             featured = ${featured}
         WHERE id = ${id}
       `;

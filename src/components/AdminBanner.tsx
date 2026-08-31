@@ -9,10 +9,10 @@ export default function AdminBanner() {
   const roleText = canEditArquitectura && canEditInmobiliaria
     ? 'Edición Global (Arquitectura e Inmobiliaria)'
     : canEditArquitectura
-    ? 'Edición de Arquitectura'
-    : canEditInmobiliaria
-    ? 'Edición de Inmobiliaria y Bienes Raíces'
-    : 'Modo Solo Lectura';
+      ? 'Edición de Arquitectura'
+      : canEditInmobiliaria
+        ? 'Edición de Inmobiliaria y Bienes Raíces'
+        : 'Modo Solo Lectura';
 
   return (
     <div className="fixed top-0 left-0 w-full h-10 bg-slate-900 border-b border-brand-green/30 text-white z-50 flex items-center justify-between px-4 sm:px-6 lg:px-8 text-xs select-none shadow-md">

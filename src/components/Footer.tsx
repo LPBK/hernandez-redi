@@ -45,7 +45,7 @@ export default function Footer() {
               Nuestra Oficina
             </h3>
             <div className="flex items-start space-x-3 text-sm text-gray-300">
-              <FaMapMarkerAlt className="text-brand-green-light mt-1 flex-shrink-0" size={18} />
+              <FaMapMarkerAlt className="text-brand-green-light mt-1 shrink-0" size={18} />
               <div>
                 <p className="font-semibold text-white">Calle Juan Pablo Duarte #60</p>
                 <p>Centro de la Ciudad, Las Terrenas</p>

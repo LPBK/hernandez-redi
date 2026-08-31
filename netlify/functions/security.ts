@@ -79,12 +79,12 @@ export function sanitizeNumber(val: unknown, min: number = 0, max: number = 1000
 export function sanitizeImageUrl(url: unknown): string {
   if (typeof url !== 'string') return '';
   const trimmed = url.trim();
-  
+
   // Safe default assets
   if (trimmed.startsWith('/') && !trimmed.startsWith('//')) {
     return trimmed.slice(0, 500);
   }
-  
+
   // Valid HTTPS URL
   if (/^https:\/\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+$/i.test(trimmed)) {
     return trimmed.slice(0, 1000);
@@ -191,7 +191,7 @@ export async function verifyAuthToken(authHeader: string | null): Promise<TokenP
 
   try {
     const key = await getCryptoKey();
-    
+
     // Convert signature from base64Url to bytes
     const base64 = encodedSignature.replace(/-/g, '+').replace(/_/g, '/');
     const padded = base64.padEnd(base64.length + (4 - (base64.length % 4)) % 4, '=');

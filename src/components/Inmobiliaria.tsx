@@ -257,10 +257,10 @@ export default function Inmobiliaria() {
                     {service.title}
                   </h3>
                 </div>
-                <ul className="space-y-3 flex-grow">
+                <ul className="space-y-3 grow">
                   {service.items.map((item, idx) => (
                     <li key={idx} className="flex items-start text-sm text-gray-600 leading-relaxed">
-                      <span className="h-1.5 w-1.5 rounded-full bg-brand-green mt-2 mr-2.5 flex-shrink-0" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-brand-green mt-2 mr-2.5 shrink-0" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -297,33 +297,30 @@ export default function Inmobiliaria() {
               <button
                 type="button"
                 onClick={() => setFilterType('todos')}
-                className={`px-6 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-                  filterType === 'todos'
+                className={`px-6 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${filterType === 'todos'
                     ? 'bg-brand-blue text-white shadow-md'
                     : 'text-slate-600 dark:text-slate-300 hover:text-brand-blue dark:hover:text-white'
-                }`}
+                  }`}
               >
                 Todas las Propiedades
               </button>
               <button
                 type="button"
                 onClick={() => setFilterType('venta')}
-                className={`px-6 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-                  filterType === 'venta'
+                className={`px-6 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${filterType === 'venta'
                     ? 'bg-brand-blue text-white shadow-md'
                     : 'text-slate-600 dark:text-slate-300 hover:text-brand-blue dark:hover:text-white'
-                }`}
+                  }`}
               >
                 En Venta
               </button>
               <button
                 type="button"
                 onClick={() => setFilterType('alquiler')}
-                className={`px-6 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-                  filterType === 'alquiler'
+                className={`px-6 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${filterType === 'alquiler'
                     ? 'bg-brand-blue text-white shadow-md'
                     : 'text-slate-600 dark:text-slate-300 hover:text-brand-blue dark:hover:text-white'
-                }`}
+                  }`}
               >
                 En Alquiler
               </button>
@@ -332,12 +329,12 @@ export default function Inmobiliaria() {
 
           {/* Glassmorphism scrollable list container */}
           <div className="bg-slate-50/50 dark:bg-slate-900/10 backdrop-blur-md border border-slate-200/30 dark:border-slate-800/20 shadow-xl rounded-3xl p-6 sm:p-8">
-            <div className="max-h-[650px] overflow-y-auto pr-3 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
+            <div className="max-h-162.5 overflow-y-auto pr-3 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
               {filteredProperties.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-1">
                   {filteredProperties.map((prop) => (
                     <div key={prop.id} className="relative bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-md hover:shadow-xl hover:scale-[1.01] transition-all duration-300 flex flex-col group h-full">
-                      
+
                       {/* Admin controls overlay */}
                       {canEditInmobiliaria && (
                         <div className="absolute top-4 left-4 z-30 flex items-center gap-2">
@@ -367,7 +364,7 @@ export default function Inmobiliaria() {
                       </div>
 
                       {/* Content */}
-                      <div className="p-5 flex flex-col flex-grow space-y-4">
+                      <div className="p-5 flex flex-col grow space-y-4">
                         <div className="space-y-1">
                           <span className="text-[10px] font-bold text-brand-green uppercase tracking-wider">
                             {prop.category}
@@ -377,7 +374,7 @@ export default function Inmobiliaria() {
                           </h3>
                         </div>
 
-                        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed flex-grow">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed grow">
                           {prop.description}
                         </p>
 
@@ -403,7 +400,7 @@ export default function Inmobiliaria() {
 
                         {/* Location info */}
                         <div className="flex items-center space-x-1.5 text-xs text-slate-500 dark:text-slate-400">
-                          <FaMapMarkerAlt className="text-brand-green flex-shrink-0" size={13} />
+                          <FaMapMarkerAlt className="text-brand-green shrink-0" size={13} />
                           <span className="line-clamp-1">{prop.location}</span>
                         </div>
 
@@ -443,9 +440,9 @@ export default function Inmobiliaria() {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
           <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
-            
+
             {/* Modal Header */}
-            <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between flex-shrink-0">
+            <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0">
               <h3 className="text-lg font-bold text-slate-800 dark:text-white">
                 {editingProperty ? 'Editar Propiedad' : 'Agregar Nueva Propiedad'}
               </h3>
@@ -458,7 +455,7 @@ export default function Inmobiliaria() {
             </div>
 
             {/* Modal Body Form */}
-            <form onSubmit={handleSave} className="flex-grow overflow-y-auto p-6 space-y-4">
+            <form onSubmit={handleSave} className="grow overflow-y-auto p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Title */}
                 <div className="md:col-span-2">
@@ -678,7 +675,7 @@ export default function Inmobiliaria() {
                           type="text"
                           value={newImageUrl}
                           onChange={e => setNewImageUrl(e.target.value)}
-                          className="flex-grow px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-brand-blue text-slate-800 dark:text-white"
+                          className="grow px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-brand-blue text-slate-800 dark:text-white"
                           placeholder="https://ejemplo.com/foto.jpg"
                         />
                         <button
@@ -695,7 +692,7 @@ export default function Inmobiliaria() {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-850 flex justify-end gap-3 flex-shrink-0">
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-850 flex justify-end gap-3 shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
@@ -720,7 +717,7 @@ export default function Inmobiliaria() {
       {selectedProperty && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
           <div className="relative w-full max-w-4xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-200 flex flex-col md:flex-row max-h-[90vh] md:max-h-[85vh]">
-            
+
             {/* Close Button */}
             <button
               onClick={() => setSelectedProperty(null)}
@@ -733,13 +730,13 @@ export default function Inmobiliaria() {
             {/* Left Column: Image Gallery/Carousel & Description */}
             <div className="w-full md:w-1/2 bg-slate-50 dark:bg-slate-950 border-r border-slate-150 dark:border-slate-850 flex flex-col overflow-y-auto max-h-[45vh] md:max-h-[85vh]">
               {/* Carousel wrapper */}
-              <div className="relative w-full aspect-video min-h-[280px] sm:min-h-[320px] bg-slate-100 dark:bg-slate-950 flex-shrink-0">
+              <div className="relative w-full aspect-video min-h-70 sm:min-h-80 bg-slate-100 dark:bg-slate-950 shrink-0">
                 <Carousel slides={selectedProperty.images} />
                 <span className="absolute top-4 left-4 px-3 py-1 bg-brand-green text-white text-xs font-bold uppercase rounded-full tracking-wide shadow-md z-10">
                   En {selectedProperty.type}
                 </span>
               </div>
-              
+
               {/* Description */}
               <div className="p-6 space-y-3">
                 <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
@@ -795,13 +792,13 @@ export default function Inmobiliaria() {
 
                 {/* Location */}
                 <div className="flex items-start space-x-2 text-sm text-slate-650 dark:text-slate-300">
-                  <FaMapMarkerAlt className="text-brand-green mt-0.5 flex-shrink-0" size={16} />
+                  <FaMapMarkerAlt className="text-brand-green mt-0.5 shrink-0" size={16} />
                   <span>{selectedProperty.location}</span>
                 </div>
               </div>
 
               {/* Contact Actions */}
-              <div className="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-3 flex-shrink-0">
+              <div className="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-3 shrink-0">
                 <h4 className="text-xs font-bold text-slate-450 uppercase tracking-wider mb-1">Contactar con un Agente</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button

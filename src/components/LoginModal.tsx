@@ -73,7 +73,7 @@ export default function LoginModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md transition-opacity duration-300">
-      <div 
+      <div
         className="relative w-full max-w-md p-8 bg-white/90 dark:bg-slate-900/90 border border-slate-200/50 dark:border-slate-800/50 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
@@ -127,7 +127,7 @@ export default function LoginModal() {
                 maxLength={50}
                 value={username}
                 onChange={e => setUsername(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all disabled:opacity-50"
+                className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/50 transition-all disabled:opacity-50"
                 placeholder="Nombre de usuario"
                 autoComplete="username"
               />
@@ -148,7 +148,7 @@ export default function LoginModal() {
                 maxLength={100}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full pl-10 pr-10 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all disabled:opacity-50"
+                className="w-full pl-10 pr-10 py-3 bg-slate-50 dark:bg-slate-800/50 border dark:border-slate-700 rounded-xl dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all disabled:opacity-50"
                 placeholder="••••••••••••"
                 autoComplete="current-password"
               />
@@ -166,7 +166,7 @@ export default function LoginModal() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 mt-6 bg-brand-blue hover:bg-brand-blue-light text-white font-bold rounded-xl text-sm shadow-lg shadow-brand-blue/20 transition-all transform hover:-translate-y-[1px] active:translate-y-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 px-4 mt-6 bg-brand-blue hover:bg-brand-blue-light text-white font-bold rounded-xl text-sm shadow-lg shadow-brand-blue/20 transition-all transform hover:-translate-y-px active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Validando...' : 'Iniciar Sesión'}
           </button>

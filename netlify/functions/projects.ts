@@ -1,10 +1,10 @@
 import { sql } from './db-client.js';
-import { 
-  verifyAuthToken, 
-  getSecurityHeaders, 
-  sanitizeString, 
-  sanitizeImageUrl, 
-  createSafeErrorResponse 
+import {
+  verifyAuthToken,
+  getSecurityHeaders,
+  sanitizeString,
+  sanitizeImageUrl,
+  createSafeErrorResponse
 } from './security.js';
 
 export default async (request: Request) => {
@@ -45,7 +45,7 @@ export default async (request: Request) => {
       if (!title || !location) {
         return createSafeErrorResponse(400, 'El título y la ubicación son campos obligatorios.');
       }
-      
+
       const id = `proj-${Date.now()}`;
 
       await sql`

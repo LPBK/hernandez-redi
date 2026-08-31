@@ -28,7 +28,7 @@ export default function Carousel({ slides }: CarouselProps) {
         }}
       >
         {slides.map((slide, index) => (
-          <div key={index} className="flex-shrink-0 w-full h-full">
+          <div key={index} className="shrink-0 w-full h-full">
             <img
               src={slide}
               alt={`Property slide ${index + 1}`}
@@ -38,7 +38,7 @@ export default function Carousel({ slides }: CarouselProps) {
           </div>
         ))}
       </div>
-      
+
       {/* Navigation Arrows */}
       {slides.length > 1 && (
         <>
@@ -66,9 +66,8 @@ export default function Carousel({ slides }: CarouselProps) {
                 <button
                   key={i}
                   onClick={() => setCurr(i)}
-                  className={`transition-all w-2 h-2 rounded-full ${
-                    curr === i ? 'bg-white p-1' : 'bg-white/50'
-                  }`}
+                  className={`transition-all w-2 h-2 rounded-full ${curr === i ? 'bg-white p-1' : 'bg-white/50'
+                    }`}
                   aria-label={`Ir a imagen ${i + 1}`}
                 />
               ))}

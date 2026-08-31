@@ -6,7 +6,7 @@ export default function Inicio() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative w-full h-[650px] bg-black overflow-hidden">
+      <section className="relative w-full h-162.5 bg-black overflow-hidden">
         {/* Background Image with Dark Overlay */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -14,7 +14,7 @@ export default function Inicio() {
             backgroundImage: "url('/hero_villa.jpg')",
           }}
         >
-          <div className="absolute inset-0 bg-black/20 sm:bg-gradient-to-r sm:from-black/15 sm:via-black/25 sm:to-transparent" />
+          <div className="absolute inset-0 bg-black/20 sm:bg-linear-to-r sm:from-black/15 sm:via-black/25 sm:to-transparent" />
         </div>
 
         {/* Hero Content */}
@@ -44,7 +44,7 @@ export default function Inicio() {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            
+
             {/* Legal Services Card */}
             <div className="flex flex-col items-center text-center p-8 bg-[#F8FAFC] rounded-xl hover:shadow-xl hover:scale-[1.02] transition-all duration-300 border border-slate-100 group">
               <div className="h-16 w-16 flex items-center justify-center rounded-full bg-brand-blue-light/10 text-brand-blue mb-6 group-hover:bg-brand-blue group-hover:text-white transition-all duration-300">
@@ -53,7 +53,7 @@ export default function Inicio() {
               <h2 className="text-xl font-bold text-brand-blue mb-4">
                 Servicios Jurídicos y Legales
               </h2>
-              <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-grow">
+              <p className="text-sm text-gray-600 leading-relaxed mb-6 grow">
                 Protección y asesoría especializada en derecho civil, penal y corporativo para garantizar transacciones e inversiones seguras.
               </p>
               <Link
@@ -72,7 +72,7 @@ export default function Inicio() {
               <h2 className="text-xl font-bold text-brand-blue mb-4">
                 Bienes Raíces y Gestión
               </h2>
-              <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-grow">
+              <p className="text-sm text-gray-600 leading-relaxed mb-6 grow">
                 Encuentre y gestione la propiedad perfecta en Las Terrenas. Transferencias, administración de condominios y alquileres.
               </p>
               <Link
@@ -91,7 +91,7 @@ export default function Inicio() {
               <h2 className="text-xl font-bold text-brand-blue mb-4">
                 Arquitectura y Construcción
               </h2>
-              <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-grow">
+              <p className="text-sm text-gray-600 leading-relaxed mb-6 grow">
                 De la visión a la obra. Diseño arquitectónico, levantamientos, remodelación, tasación y supervisión de proyectos de alta gama.
               </p>
               <Link

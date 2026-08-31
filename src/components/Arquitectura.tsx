@@ -169,10 +169,10 @@ export default function Arquitectura() {
       <section className="py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
+
             {/* Left Column: Image with accent overlay */}
             <div className="lg:col-span-5 relative group">
-              <div className="absolute -inset-2 bg-gradient-to-r from-brand-green to-brand-blue rounded-2xl blur-lg opacity-25 group-hover:opacity-40 transition duration-500" />
+              <div className="absolute -inset-2 bg-linear-to-r from-brand-green to-brand-blue rounded-2xl blur-lg opacity-25 group-hover:opacity-40 transition duration-500" />
               <div className="relative bg-white p-2 rounded-2xl shadow-lg border border-slate-100">
                 <img
                   src="/arquitectura.png"
@@ -190,30 +190,30 @@ export default function Arquitectura() {
               <p className="text-gray-600 font-light leading-relaxed">
                 Acompañamos a nuestros clientes en cada etapa del desarrollo. Desde la concepción preliminar de ideas, diseño detallado de lotificaciones, levantamientos en terreno, modelado 3D, hasta la obtención de licencias de obra.
               </p>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
                 <div className="flex items-center space-x-3 text-sm text-gray-700">
-                  <FaCheckCircle className="text-brand-green flex-shrink-0" size={16} />
+                  <FaCheckCircle className="text-brand-green shrink-0" size={16} />
                   <span>DISEÑOS ARQUITECTÓNICOS</span>
                 </div>
                 <div className="flex items-center space-x-3 text-sm text-gray-700">
-                  <FaCheckCircle className="text-brand-green flex-shrink-0" size={16} />
+                  <FaCheckCircle className="text-brand-green shrink-0" size={16} />
                   <span>CONSTRUCCIÓN DE VILLAS</span>
                 </div>
                 <div className="flex items-center space-x-3 text-sm text-gray-700">
-                  <FaCheckCircle className="text-brand-green flex-shrink-0" size={16} />
+                  <FaCheckCircle className="text-brand-green shrink-0" size={16} />
                   <span>DISEÑO DE LOTIFICACIONES</span>
                 </div>
                 <div className="flex items-center space-x-3 text-sm text-gray-700">
-                  <FaCheckCircle className="text-brand-green flex-shrink-0" size={16} />
+                  <FaCheckCircle className="text-brand-green shrink-0" size={16} />
                   <span>SUPERVISIÓN DE PROYECTOS</span>
                 </div>
                 <div className="flex items-center space-x-3 text-sm text-gray-700">
-                  <FaCheckCircle className="text-brand-green flex-shrink-0" size={16} />
+                  <FaCheckCircle className="text-brand-green shrink-0" size={16} />
                   <span>LEVANTAMIENTOS DE INMUEBLES</span>
                 </div>
                 <div className="flex items-center space-x-3 text-sm text-gray-700">
-                  <FaCheckCircle className="text-brand-green flex-shrink-0" size={16} />
+                  <FaCheckCircle className="text-brand-green shrink-0" size={16} />
                   <span>TASACIONES INMOBILIARIAS</span>
                 </div>
               </div>
@@ -226,7 +226,7 @@ export default function Arquitectura() {
       {/* Rebuilt Portfolio Grid matching Mockup */}
       <section className="py-24 bg-white border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
             <h2 className="text-3xl font-extrabold text-brand-blue uppercase tracking-wide flex items-center justify-center gap-4 flex-wrap">
               <span>Portafolio de Arquitectura y Construcción</span>
@@ -254,10 +254,10 @@ export default function Arquitectura() {
                 <h3 className="text-base font-bold text-brand-blue tracking-wide">
                   {srv.title}
                 </h3>
-                <ul className="space-y-2 flex-grow">
+                <ul className="space-y-2 grow">
                   {srv.items.map((item, idx) => (
                     <li key={idx} className="text-xs text-gray-600 leading-relaxed flex items-start">
-                      <span className="h-1 w-1 rounded-full bg-brand-green mt-1.5 mr-2 flex-shrink-0" />
+                      <span className="h-1 w-1 rounded-full bg-brand-green mt-1.5 mr-2 shrink-0" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -268,7 +268,7 @@ export default function Arquitectura() {
 
           {/* Glassmorphism scrollable list container */}
           <div className="bg-slate-50/50 dark:bg-slate-900/10 backdrop-blur-md border border-slate-200/30 dark:border-slate-800/20 shadow-xl rounded-3xl p-6 sm:p-8">
-            <div className="max-h-[600px] overflow-y-auto pr-3 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
+            <div className="max-h-150 overflow-y-auto pr-3 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
               {projects.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-1">
                   {projects.map((proj, idx) => (
@@ -277,7 +277,7 @@ export default function Arquitectura() {
                       onClick={() => setSelectedProject(proj)}
                       className="group relative rounded-xl overflow-hidden shadow-md h-64 bg-slate-200 cursor-pointer"
                     >
-                      
+
                       {/* Admin controls overlay */}
                       {canEditArquitectura && (
                         <div className="absolute top-4 left-4 z-30 flex items-center gap-2">
@@ -303,7 +303,7 @@ export default function Arquitectura() {
                         alt={proj.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-brand-blue-dark via-transparent to-transparent opacity-80" />
+                      <div className="absolute inset-0 bg-linear-to-t from-brand-blue-dark via-transparent to-transparent opacity-80" />
                       <div className="absolute bottom-4 left-4 text-white space-y-0.5 z-10">
                         <h4 className="text-sm font-bold tracking-wide uppercase">
                           {proj.title}
@@ -334,7 +334,7 @@ export default function Arquitectura() {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
           <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-200 flex flex-col">
-            
+
             {/* Modal Header */}
             <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <h3 className="text-lg font-bold text-slate-800 dark:text-white">
@@ -469,7 +469,7 @@ export default function Arquitectura() {
       {selectedProject && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
           <div className="relative w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-200 flex flex-col md:flex-row max-h-[90vh] md:max-h-[85vh]">
-            
+
             {/* Close Button */}
             <button
               onClick={() => setSelectedProject(null)}
@@ -490,7 +490,7 @@ export default function Arquitectura() {
 
             {/* Right Column: Title, Location & CTA */}
             <div className="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto max-h-[45vh] md:max-h-[85vh] space-y-6 bg-white dark:bg-slate-900">
-              
+
               <div className="space-y-4">
                 <span className="text-xs font-bold text-brand-green uppercase tracking-wider">
                   Proyecto de Arquitectura
@@ -498,15 +498,15 @@ export default function Arquitectura() {
                 <h3 className="text-2xl font-extrabold text-brand-blue dark:text-slate-100">
                   {selectedProject.title}
                 </h3>
-                
+
                 <div className="flex items-start space-x-2 text-sm text-slate-650 dark:text-slate-300 border-t border-slate-100 dark:border-slate-800 pt-4">
-                  <FaMapMarkerAlt className="text-brand-green mt-0.5 flex-shrink-0" size={16} />
+                  <FaMapMarkerAlt className="text-brand-green mt-0.5 shrink-0" size={16} />
                   <span>{selectedProject.location}</span>
                 </div>
               </div>
 
               {/* Action buttons (WhatsApp Edita / Contact Form) */}
-              <div className="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-3 flex-shrink-0">
+              <div className="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-3 shrink-0">
                 <h4 className="text-xs font-bold text-slate-450 uppercase tracking-wider mb-1">
                   Consultar con la Arquitecta
                 </h4>
